@@ -80,7 +80,7 @@
 						<li class="fragment">What are the usage patterns of your data? Will your application be read or write intensive?</li>
 						<li class="fragment">How do you anticipate your documents will change over time?</li>
 						<li class="fragment">Will your documents and/or embedded documents grow over time?</li>
-						<li class="fragment">Are there some immutable fields that you can take leverage?</li>
+						<li class="fragment">Are there some immutable fields that you can leverage?</li>
 						<li class="fragment">Do you anticipate needing to shard your data?</li>
 					</ul>
 				</section>
@@ -340,7 +340,7 @@ You can even index on keys inside embedded documents.
 }
 								</code></pre>
 								<br/>
-							<p style="margin-left:30px;">Example: username is unique and could be used as the primary key </p>
+							<p style="margin-left:30px;">Example: username is unique and could be used as the primary key. </p>
 							</li>
 
 							<li class="fragment">
@@ -352,7 +352,7 @@ book.author :
 },
 								</code></pre>
 <br/>
-<p style="margin-left:30px;"> Example: author name probably won't change </p>
+<p style="margin-left:30px;"> Example: author name probably won't change and could be embedded. </p>
 							</li>						
 						</ul>
 					</section>
@@ -360,7 +360,7 @@ book.author :
 				<section>
 					<section>
 						<h1>Application Queries</h1>
-						<h3>See all the books by a specific author</h3>
+						<h3>Query for all the books by a specific author</h3>
 						<pre><code class="language-javascript small-size">
 > author = db.authors.findOne({first_name : "F. Scott", last_name : "Fitzgerald"});
 
@@ -387,12 +387,12 @@ book.author :
 }
 						</code></pre>
 					<br/>
-					<p style="margin-left:50px;"> (read-friendly)</p>	
+					<p style="margin-left:50px;"> Read-friendly - Only one query necessary.</p>	
 					</section>
 
 
 					<section>
-						<h3>Search for books by title</h3>
+						<h3>Query for books by title</h3>
 						<pre><code class="language-javascript small-size">
 > db.books.find({title: "The Great Gatsby"})
 {
@@ -416,7 +416,7 @@ book.author :
 				<section>
 					<section>
 						<h1>Schema Evolution for read-heavy use</h1>
-						<h3>Search for books by author</h3>
+						<h3>Query for books by author first name</h3>
 						<pre><code class="language-javascript small-size">
 > authors = db.authors.find( { first_name : /^f.*/i }, {_id : 1})
 
@@ -451,7 +451,7 @@ book = {
 						</ul>
 					</section>
 					<section>
-						<h3>Search for books by author</h3>
+						<h3>Query for books by author first name using an embedded document with cached name.</h3>
 						<pre><code class="language-javascript small-size">
 > db.books.find({author.name : /^f.*/i })
 {
@@ -462,7 +462,32 @@ book = {
 }
 						</code></pre>
 					</section>
+					
+					
+					<section>
+						<h3>Think about indexes and sharding</h3>
+						<ul>
+							<li class="fragment">
+								Multi-key indexes.
+							</li>
+							<li class="fragment">
+								Secondary indexes.
+							</li>
+							<li class="fragment">
+								Shard key choice.
+							</li>
+						</ul>
+
+					</section>
+					
 				</section>
+ <aside class="notes">
+All docs must have the shard key
+Shard key values are immutable once the doc is inserted
+How will your query using the shard key
+Make sure that sorting by shard key can be efficient 
+ </aside>				
+ 
 				<section>
 					<section>
 						<h1>Schema Evolution for write-heavy use</h1>
@@ -491,16 +516,18 @@ book = {
 					<section>
 						<h3>Anti-pattern: Continually Growing Documents (Heavy-Writes)</h3>
 						<ul>
-							<li>Because of the limit on document size, documents, including the original content and all comments, cannot grow beyond 16 megabytes.</li>
-							<li>Storage fragmentation and degraded update performance while MongoDB migrates documents internally</li>
-							<li>Documents are unnecessarily large</li>
+							<li class="fragment">Because of the limit on document size, documents-- including the top-level content and all subdocuments-- cannot grow beyond 16 megabytes.</li>
+							<li class="fragment">Storage fragmentation and degraded update performance while MongoDB migrates documents internally.</li>
+							<li class="fragment">Documents can grow to become unnecessarily large.</li>
 						</ul>
+						<br/>
+						<h3 class="fragment">What is an alternative to storing the notes in an array?</h3>
 					</section>
 					<section>
 						<h3>Possible Solution</h3>
 						<ul>
 							<li>
-								Move <code>notes</code> to another document
+								Move <code>notes</code> to another document, with one document per book id.
 								<pre><code class="language-javascript small-size">
 book = {
   _id: "int",
@@ -516,11 +543,36 @@ bookNotes = {
 }
 								</code></pre>
 							</li>
-							<li class="fragment">Keeps the <code>book</code> document size consistent</li>
-							<li class="fragment">Queries for <code>books</code> don't return all the <code>notes</code></li>
-							<li class="fragment">Still suffers from a continually growing <code>bookNote</code> document</li>
+							<li class="fragment">Keeps the <code>book</code> document size consistent.</li>
+							<li class="fragment">Queries for <code>books</code> don't return all the <code>notes</code>.</li>
+							<li class="fragment">Still suffers from a continually growing <code>bookNote</code> document.</li>
+						</ul>
+	
+</section>
+					<section>
+						<h3>Possible Solution</h3>
+						<ul>
+							<li>
+								Move <code>notes</code> to another document, with one document per book note.
+								<pre><code class="language-javascript small-size">
+book = {
+  _id: "int",
+  ... // remove the notes field
+}
+
+bookNotes = {
+  _id : "int", // this will be the same as the book id...
+  *user : "ObjectId",
+  note : "string"
+}
+								</code></pre>
+							</li>
+							<li class="fragment">Keeps the <code>book</code> document size consistent.</li>
+							<li class="fragment">Queries for <code>books</code> don't return all the <code>notes</code>.</li>
+							<li class="fragment">Notes not necessarily near each other on disk. Possibly slow reads.</li>
 						</ul>
 					</section>
+					
 					<section>
 						<h3>Pattern: Bucketing</h3>
 						<ul>
@@ -558,6 +610,91 @@ bookNotes = {
 						</ul>
 					</section>
 				</section>
+
+					<section>
+						<section>
+							<h1>Storing a tree</h1>
+							<p class="fragment">How can we model a <code>bookNotes</code> with comments?</p>
+							<pre class="fragment"><code class="language-javascript small-size">
+	bookNotes = {
+	  _id : "ObjectId", 
+	  book: "ObjectId", // this is the book id
+	  note_count: "int",
+	  last_changed : "UTC datetime",
+	  *user : "ObjectId",
+	  note : "string",
+	  comments: [
+	    {by: "mathias", text: "...", replies: []}
+	    {by: "eliot", text: "...", replies: [
+	       {by: "mike", text: "...", replies: []}
+	    ]}
+	  ]
+	}
+
+									</code></pre>
+						</section>
+					
+					
+					<section>
+						<h3>What benefits does this provide?</h3>
+						<ul>
+							<li class="fragment">
+								Single document for all comments on a note.
+							</li>
+							<li class="fragment">
+								Single location on disk for the whole tree.
+							</li>
+							<li class="fragment">
+								Legible tree structure.
+							</li>
+						</ul>
+						<br/>
+						<h3>What are the drawbacks of storing a tree in this way?</h3>
+						<ul>
+							<li class="fragment">
+								Difficult to search.
+							</li>
+							<li class="fragment">
+								Difficult to get back partial results.
+							</li>
+							<li class="fragment">
+								Document can get large very quickly.
+							</li>
+						</ul>
+					</section>
+							
+
+					<section>
+						<h1>Alternative solution: <br/>Store arrays of ancestors</h1>
+						<pre><code class="language-javascript small-size">
+> t = db.mytree;
+
+> t.find()
+{ "_id" : "a" }
+{ "_id" : "b", "ancestors" : [ "a" ], "parent" : "a" }
+{ "_id" : "c", "ancestors" : [ "a", "b" ], "parent" : "b" }
+{ "_id" : "d", "ancestors" : [ "a", "b" ], "parent" : "b" }
+{ "_id" : "e", "ancestors" : [ "a" ], "parent" : "a" }
+{ "_id" : "f", "ancestors" : [ "a", "e" ], "parent" : "e" }
+{ "_id" : "g", "ancestors" : [ "a", "b", "d" ], "parent" : "d" }
+
+					</code></pre>
+						
+						<br/>
+						<h3 class="fragment">How would you do it?</h3>
+					</section>
+					
+				</section>
+				
+				<section>
+					<h1>Schema design in mongoDB</h1>
+					<br/>
+					<h2 class="fragment">Basic design principles apply.</h2><br/>
+					<h2 class="fragment">Focus on how your application uses and changes the data when designing a schema.</h2><br/>
+					<h2 class="fragment">Take advantage of the flexibility and features of mongoDB.</h2><br/>
+					<h2 class="fragment">Anticipate document and collection growth over time.</h2>
+				</section>
+				
 			</div>
 
 			<!-- The navigational controls UI -->
