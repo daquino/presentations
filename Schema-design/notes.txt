@@ -1,0 +1,89 @@
+
+Guidelines:
+
+	Leverage flexibility and features (like indexing, querying, atomic updates) of mongoDB
+	Make sure you put checks and "protections" in your application code for things like relationships.
+	Your schema can change as you insert more data.
+	The way you use the data is how it should be modeled.
+	Use natural primary keys
+		For example, user email or username
+		One less index
+	Basic design principles apply.
+	Anticipate document and collection growth over time.
+
+General notes:
+		Each document has "schema" data, so make field names short.
+		Keep in mind mongoDB doesn't support transactions
+			no rollback, no begin and commit
+		What is the lifetime of your data?
+			Frequent deletes? Possibly leads to fragmentation.
+		Embedded docs could have their own ids, but it's up to the application to generate them (and keep them unique)
+		No way to get the size of an array, you'd have to cache the size
+		Updates don't return the document. Use findAndModify instead.
+		Data in mongodb is not necessarily renormalized, just maybe more object-like.
+
+Terminology
+		Table - collection
+		Row - json document
+		Index - Index
+		Join - Embedding and Linking
+
+
+Questions to ask yourself:
+
+	What is your usage pattern of the data?
+		Read-friendly approach for many-many
+			Save children ids in parent document.
+			Writes are slow.
+			Sharding is trivial.
+			For example, Obama's twitter doc has a list of his followers.
+		Write-friendly approach
+			Save parent id in child doc.
+			Slow reads.  
+			For example, db.users.find(following : obama's twitter id)
+		Hybrid
+
+	Will you shard your data?
+		All docs must contain the shard key
+		Shard key values are immutable once the doc is inserted
+		Think about how you will query using the shard key
+		Make sure sorting by shard key can be efficient
+		Unique indexes must be prefixed by the shard key
+
+
+	Concurrency:
+		Try to avoid save() in the drivers.
+			Each field is reset and only one document can be updated at a time.
+			Use update instead.
+
+
+Patterns:
+	one to many
+		Use linking (like a foreign key, but no enforcing of the relationship)
+		Embedded document
+			If your data will be used at the same time and together
+			If you need the embedded data in the same order that the parent docs are sorted
+			Performance benefits
+		Bucketing
+			Separate collection for children, but group into buckets.
+			Useful for writing/retrieving related data.
+		Which to use?
+			Depends on how you will use the data
+
+
+	Many-to-Many
+		Array of parent ids on the child, array of child ids on the parent
+			Allows you to leverage multi-key indexes
+			Requires application-level maintenance
+		Array of parents ids on the child
+
+
+	Tree
+		Store literal structure
+			Use if your data is always displayed in this way
+			Difficult to search
+			16mb limit of a document
+				(Moby Dick can be stored in 16mb)
+		Keep an array of ancestors
+		Keep a string of ancestors, delimited by a character.  
+			Use regex in query.
