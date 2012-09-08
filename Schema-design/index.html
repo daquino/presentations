@@ -77,10 +77,10 @@
 					<h1>Questions to Ask Yourself</h1>
 
 					<ul>
-						<li class="fragment">Will your application be read or write intensive?</li>
+						<li class="fragment">What are the usage patterns of your data? Will your application be read or write intensive?</li>
 						<li class="fragment">How do you anticipate your documents will change over time?</li>
 						<li class="fragment">Will your documents and/or embedded documents grow over time?</li>
-						<li class="fragment">Are there some immutable fields that you can take advantage of?</li>
+						<li class="fragment">Are there some immutable fields that you can take leverage?</li>
 						<li class="fragment">Do you anticipate needing to shard your data?</li>
 					</ul>
 				</section>
@@ -252,7 +252,7 @@ user = {
 							<h3>Principle: Schema-less does NOT mean No-Schema</h3>
 							<ul>
 								<li class="fragment">
-									Schema is defined and expectations are set at the application-level.
+									Schema is defined and expectations are set at the application level.
 									<pre><code class="language-javascript small-size">
 user = {
 	"_id": ObjectId,
@@ -287,50 +287,80 @@ db.everything.find()
 								<pre><code class="language-javascript small-size">
 book.publisher : 
 {
-	publisher_name : "Everyman’s Library",
-	date : ISODate("1991-09-19T00:00:00Z"),
-	city : "London",
+  publisher_name : "Everyman’s Library",
+  date : ISODate("1991-09-19T00:00:00Z"),
+  city : "London",
 },
 								</code></pre>
 							</li>
+							
+<aside class="notes">
+In general, use embedded documents when possible.
+Usually one embeds documents that seldom change and data that's not interesting enough to warrant a document of its own. 
+</aside> 
+			
 							<li class="fragment">
 								Pattern: Embedded Arrays
 								<pre><code class="language-javascript small-size">
 book.subjects : ["Love stories", "1920s", "Jazz Age"],
 								</code></pre>
 							</li>
+							
+<aside class="notes">
+Multi-key indexes - will index each element of the array.
+Query: db.books.find( { subject: { $all: [ 'Love stories', 'Jazz Age' ] } } )
+$addToSet and $pull to add and remove keys 
+Whether to embed positionally using an array or embedded doc is a matter of taste and depends on whether you want to use a multi-key index.
+</aside>
+
 							<li class="fragment">
 								Pattern: Embedded Arrays of Documents
 								<pre><code class="language-javascript small-size">
 book.notes : [
-	{ user : 2, note : "One of the best..."},
-	{ user : 3, note : "It’s hard to..."}
+	{ user : ObjectId("504a661b3005c813bf000001"), note : "One of the best..."},
+	{ user : ObjectId("504a661b3005c813bf000005"), note : "It’s hard to..."}
 ],
 								</code></pre>
 							</li>
+							
+<aside class="notes">
+You can even index on keys inside embedded documents. 
+</aside>
 						</ul>
 					</section>
 					<section>
 						<h3>Principle: Take Advantage of Immutable Data</h3>
 						<ul>
 							<li class="fragment">
-								Pattern: Embedded Documents
 								<pre><code class="language-javascript small-size">
-book.publisher : 
+> db.users.findOne()
 {
-	publisher_name : "Everyman’s Library",
-	date : ISODate("1991-09-19T00:00:00Z"),
-	city : "London",
+	_id : ObjectId("504a661b3005c813bf000001"),
+	username : "emily@10gen.com"
+}
+								</code></pre>
+								<br/>
+							<p style="margin-left:30px;">Example: username is unique and could be used as the primary key </p>
+							</li>
+
+							<li class="fragment">
+								<pre><code class="language-javascript small-size">
+book.author : 
+{
+	first_name : "F. Scott",
+	last_name : "Fitzgerald",
 },
 								</code></pre>
-							</li>
+<br/>
+<p style="margin-left:30px;"> Example: author name probably won't change </p>
+							</li>						
 						</ul>
 					</section>
 				</section>
 				<section>
 					<section>
-						<h1>More Queries</h1>
-						<h3>As a user, I want to see all the books by a specific author</h3>
+						<h1>Application Queries</h1>
+						<h3>See all the books by a specific author</h3>
 						<pre><code class="language-javascript small-size">
 > author = db.authors.findOne({first_name : "F. Scott", last_name : "Fitzgerald"});
 
@@ -343,10 +373,12 @@ book.publisher :
 }
 						</code></pre>	
 					</section>
+					
 					<section>
-						<h3>As a user, I want to search for books by title</h3>
+						<h3>Alternatively, use an embedded document</h3>
 						<pre><code class="language-javascript small-size">
-> db.books.find({title: "The Great Gatsby"})
+> db.books.find({author.first_name : "F. Scott", author.last_name : "Fitzgerald"});
+
 {
 	...	
 }
@@ -354,11 +386,24 @@ book.publisher :
 	...
 }
 						</code></pre>
+					<br/>
+					<p style="margin-left:50px;"> (read-friendly)</p>	
+					</section>
+
+
+					<section>
+						<h3>Search for books by title</h3>
+						<pre><code class="language-javascript small-size">
+> db.books.find({title: "The Great Gatsby"})
+{
+	...	
+}
+						</code></pre>
 					</section>
 					<section>
-						<h3>As a user, I want to see all the books in which I have made notes</h3>
+						<h3>As a user, see all the books in which I have made notes</h3>
 						<pre><code class="language-javascript small-size">
-> db.books.find({notes.user: 1})
+> db.books.find({notes.user: ObjectId("504a661b3005c813bf000001")})
 {
 	...	
 }
@@ -370,8 +415,8 @@ book.publisher :
 				</section>
 				<section>
 					<section>
-						<h1>Schema Evolution 1</h1>
-						<h3>As a user, I want to search for books by author</h3>
+						<h1>Schema Evolution for read-heavy use</h1>
+						<h3>Search for books by author</h3>
 						<pre><code class="language-javascript small-size">
 > authors = db.authors.find( { first_name : /^f.*/i }, {_id : 1})
 
@@ -387,7 +432,7 @@ book.publisher :
 						</code></pre>
 					</section>
 					<section>
-						<h3>Principle: Documents Represent Query Patterns (Heavy-Reads)</h3>
+						<h3>Principle: Documents Should Reflect Query Patterns (Heavy-Reads)</h3>
 						<ul>
 							<li class="fragment">
 								Pattern: Partially Embedded Documents
@@ -406,7 +451,7 @@ book = {
 						</ul>
 					</section>
 					<section>
-						<h3>As a user, I want to search for <code>books</code> by <code>author</code></h3>
+						<h3>Search for books by author</h3>
 						<pre><code class="language-javascript small-size">
 > db.books.find({author.name : /^f.*/i })
 {
@@ -420,10 +465,10 @@ book = {
 				</section>
 				<section>
 					<section>
-						<h1>Schema Evolution 2</h1>
-						<h3>As a user, I want to add notes to a book</h3>
+						<h1>Schema Evolution for write-heavy use</h1>
+						<h3>Add notes to a book</h3>
 						<pre><code class="language-javascript small-size">
-> note = { user: 1, "I did NOT like this book." }
+> note = { user: ObjectId("504a661b3005c813bf000001"), "I did NOT like this book." }
 
 > db.books.update({ _id : 1 }, { $push : { notes : note }})
 						</code></pre>
@@ -446,9 +491,9 @@ book = {
 					<section>
 						<h3>Anti-pattern: Continually Growing Documents (Heavy-Writes)</h3>
 						<ul>
-							<li>(Describe issues with continually growing documents)</li>
-							<li>Movement on Disk</li>
-							<li>Large Documents</li>
+							<li>Because of the limit on document size, documents, including the original content and all comments, cannot grow beyond 16 megabytes.</li>
+							<li>Storage fragmentation and degraded update performance while MongoDB migrates documents internally</li>
+							<li>Documents are unnecessarily large</li>
 						</ul>
 					</section>
 					<section>
@@ -465,7 +510,7 @@ book = {
 bookNotes = {
   _id : "int", // this will be the same as the book id...
   notes : [{
-    *user : "int",
+    *user : "ObjectId",
     note : "string"
   }]
 }
@@ -483,12 +528,12 @@ bookNotes = {
 								<code>bookNotes</code> contains a maximum number of documents
 								<pre><code class="language-javascript small-size">
 bookNotes = {
-  _id : "int", 
-  book: "int", // this will be the same as the book id...
+  _id : "ObjectId", 
+  book: "ObjectId", // this is the book id
   note_count: "int",
   last_changed : "UTC datetime",
   notes : [{
-    *user : "int",
+    *user : "ObjectId",
     note : "string"
   }]
 }
@@ -497,7 +542,7 @@ bookNotes = {
 							<li class="fragment">
 								Still use atomic operations to update an existing document or start a new one
 								<pre><code class="language-javascript small-size">
-> note = { user: 1, "I did NOT like this book." }
+> note = { user: ObjectId("504a661b3005c813bf000001"), "I did NOT like this book." }
 
 > db.bookNotes.update({
 	{ book : 1, note_count { $lt : 10 } },
