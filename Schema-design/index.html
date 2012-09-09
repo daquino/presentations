@@ -441,18 +441,16 @@ book = {
   _id: "int",
   title: "string",
   author: {
-  	*author : "int",
+  	*author : "ObjectId",
   	name : "string"
   },
   ...
 }
 								</code></pre>
 							</li>
-						</ul>
-					</section>
-					<section>
-						<h3>Query for books by author first name using an embedded document with cached name.</h3>
-						<pre><code class="language-javascript small-size">
+						<li class="fragment">
+							Query for books by author first name using an embedded document with cached name.
+							<pre><code class="language-javascript small-size">
 > db.books.find({author.name : /^f.*/i })
 {
 	...	
@@ -460,8 +458,11 @@ book = {
 {
 	...
 }
-						</code></pre>
+							</code></pre>
+						</ul>
+						
 					</section>
+
 					
 					
 					<section>
@@ -530,12 +531,12 @@ Make sure that sorting by shard key can be efficient
 								Move <code>notes</code> to another document, with one document per book id.
 								<pre><code class="language-javascript small-size">
 book = {
-  _id: "int",
+  _id: "ObjectId",
   ... // remove the notes field
 }
 
 bookNotes = {
-  _id : "int", // this will be the same as the book id...
+  _id : "ObjectId", // this will be the same as the book id...
   notes : [{
     *user : "ObjectId",
     note : "string"
@@ -556,12 +557,12 @@ bookNotes = {
 								Move <code>notes</code> to another document, with one document per book note.
 								<pre><code class="language-javascript small-size">
 book = {
-  _id: "int",
+  _id: "ObjectId",
   ... // remove the notes field
 }
 
 bookNotes = {
-  _id : "int", // this will be the same as the book id...
+  _id : "ObjectId", // this will be the same as the book id...
   *user : "ObjectId",
   note : "string"
 }
@@ -624,9 +625,9 @@ bookNotes = {
 	  *user : "ObjectId",
 	  note : "string",
 	  comments: [
-	    {by: "mathias", text: "...", replies: []}
-	    {by: "eliot", text: "...", replies: [
-	       {by: "mike", text: "...", replies: []}
+	    {user: "mathias", text: "...", replies: []}
+	    {user: "eliot", text: "...", replies: [
+	       {user: "mike", text: "...", replies: []}
 	    ]}
 	  ]
 	}
