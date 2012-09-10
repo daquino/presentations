@@ -477,6 +477,23 @@ book = {
 							<li class="fragment">
 								Shard key choice.
 							</li>
+								<ul class="fragment">
+									<li> 
+										All docs must contain the shard key
+									</li>
+									<li> 
+										Shard key values are immutable once the doc is inserted
+									</li>		
+									<li> 
+										Think about how you will query using the shard key
+									</li>		
+									<li> 
+										Make sure sorting by shard key can be efficient
+									</li>		
+									<li> 
+										Unique indexes must be prefixed by the shard key
+									</li>
+								</ul></li>
 						</ul>
 
 					</section>
@@ -536,7 +553,8 @@ book = {
 }
 
 bookNotes = {
-  _id : "ObjectId", // this will be the same as the book id...
+  _id : "ObjectId",
+  book : "ObjectId", // this will be the same as the book id...
   notes : [{
     *user : "ObjectId",
     note : "string"
@@ -598,7 +616,7 @@ bookNotes = {
 > note = { user: ObjectId("504a661b3005c813bf000001"), "I did NOT like this book." }
 
 > db.bookNotes.update({
-	{ book : 1, note_count { $lt : 10 } },
+	{ book : ObjectId("5047845f6b3b9a63a14787b1"), note_count { $lt : 10 } },
 	{ 
 		$inc : { note_count : 1 }, 
 		$push { notes : note }, 
@@ -650,7 +668,7 @@ bookNotes = {
 							</li>
 						</ul>
 						<br/>
-						<h3>What are the drawbacks of storing a tree in this way?</h3>
+						<h3 class="fragment">What are the drawbacks of storing a tree in this way?</h3>
 						<ul>
 							<li class="fragment">
 								Difficult to search.
