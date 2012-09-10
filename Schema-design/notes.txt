@@ -1,4 +1,3 @@
-
 Guidelines:
 
 	Leverage flexibility and features (like indexing, querying, atomic updates) of mongoDB
@@ -17,7 +16,8 @@ General notes:
 			no rollback, no begin and commit
 		What is the lifetime of your data?
 			Frequent deletes? Possibly leads to fragmentation.
-		Embedded docs could have their own ids, but it's up to the application to generate them (and keep them unique)
+		Embedded docs could have their own ids, but it's up to the application to generate them 
+			(and keep them unique)
 		No way to get the size of an array, you'd have to cache the size
 		Updates don't return the document. Use findAndModify instead.
 		Data in mongodb is not necessarily renormalized, just maybe more object-like.
