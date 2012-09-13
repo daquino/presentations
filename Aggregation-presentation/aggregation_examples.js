@@ -112,7 +112,9 @@ var ex5 = db.books.aggregate(
 // Bring nested values to top level using project
 var ex6 = db.books.aggregate(
 	{ $project : 
-			{title : 1, author_first : "$author.first_name", author_last : "$author.last_name" } 
+			{title : 1, 
+			 author_first : "$author.first_name", 
+			 author_last : "$author.last_name" } 
 	}	
 );
 

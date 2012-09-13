@@ -22,8 +22,8 @@
 
 		<script>
 			// If the query includes 'print-pdf' we'll use the PDF print sheet
-			var print = ( window.location.search.match( /print-pdf/gi ) ? true : false );
-			document.write( '<link rel="stylesheet" href="css/print/' + ( print ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+			var print = ( window.location.search.match( /print-pdf/gi ) ? true: false );
+			document.write( '<link rel="stylesheet" href="css/print/' + ( print ? 'pdf': 'paper' ) + '.css" type="text/css" media="print">' );
 			if (print) { document.querySelector( 'html' ).classList.add('print');}
 		</script>
 
@@ -46,28 +46,26 @@
 					<h2>Schema Design By Example</h2>
 
 					Emily Stolfo - <emily@10gen.com>
-
 					twitter: <a href="http://twitter.com/EmStolfo">@EmStolfo</a>
 				</section>
 
 				<section>
-					<h1>Today's Talk</h1>
-
-					<ul>
-						<li>Why is schema design important?</li>
-						<li>Questions to ask yourself when designing a schema.</li>
-						<li>What schema elements are available for you to design around?</li>
-						<li>Examples.</li>
-					</ul>
+					<h1>Schema design in mongoDB is special</h1>
+						<div class="fragment">
+				   	 		<p>Why is schema design important?</p>
+						   	<p>Questions to ask yourself when designing a schema.</p>
+						   	<p>What schema elements are available for you to design around?</p>
+						   	<p>Examples illustrating different solutions.</p>
+                   		</div>
 				</section>
 
 				<section>
 					<h1>Why is schema design important?</h1>
 					
-					<ul>
-						<li class="fragment">mongoDB gives you a lot of flexibility and power over the data you are representing.</li>
-						<li class="fragment">The way you model your data should be a function of how your application uses it.</li>
-						<li class="fragment">Your data may grow and its priorities may change over time. Your schema can help you anticipate this.</li>
+					<ul style="font-size:50px;">
+						<li class="fragment">Flexibility</li>
+						<li class="fragment">Data modeled based on usage</li>
+						<li class="fragment">Priorities change</li>
 
 					</ul>
 					
@@ -76,57 +74,61 @@
 				<section>
 					<h1>Questions to Ask Yourself</h1>
 
-					<ul>
-						<li class="fragment">What are the usage patterns of your data? Will your application be read or write intensive?</li>
-						<li class="fragment">How do you anticipate your documents will change over time?</li>
-						<li class="fragment">Will your documents and/or embedded documents grow over time?</li>
-						<li class="fragment">Are there some immutable fields that you can leverage?</li>
-						<li class="fragment">Do you anticipate needing to shard your data?</li>
+					<ul style="font-size:50px;">
+						<li class="fragment">Will your application be read or write intensive?</li>
+						<li class="fragment">
+							Will documents change over time?
+							<ul>
+								<li>Grow or shrink?</li>
+								<li>Normalized or denormalized?</li>
+							</ul>
+						<li class="fragment">Are there immutables fields that can be leveraged?</li>
+						<li class="fragment">Will you shard your data?</li>
 					</ul>
 				</section>
 
 				<section>
-					<h1>Available Schema Elements</h1>
-
-					<ul style="line-height:1em;"> 
-						<li class="fragment">
-							Primitive Types
-							<ul style="line-height:.4em;">
-								<li>Double</li>
-								<li>UTF-8 String</li>
-								<li>
-									Binary
+					<h1>BSON Documents fields</h1>
+					<div>
+						<div style="width:49%;display:inline-block;">
+							<ul style="font-size:50px;"> 
+								<li class="fragment">
+									Primitive Types
 									<ul style="line-height:.4em;">
-										<li>Raw</li>
-										<li>Guid
-										<li>MD5</li>
+										<li>Double</li>
+										<li>UTF-8 String</li>
+										<li>Binary</li>
+										<li>ObjectId</li>
+										<li>Boolean</li>
+										<li>UTC DateTime</li>
+										<li>Null</li>
+										<li>Regular Expression</li>
+										<li>32-bit Integer</li>
+										<li>Timestamp</li>
+										<li>64-bit Integer</li>
 									</ul>
 								</li>
-								<li>ObjectId</li>
-								<li>Boolean</li>
-								<li>UTC DateTime</li>
-								<li>Null</li>
-								<li>Regular Expression</li>
-								<li>32-bit Integer</li>
-								<li>Timestamp</li>
-								<li>64-bit Integer</li>
 							</ul>
-						</li>
-						<li class="fragment">
-							Rich Types
-							<ul style="line-height:.4em;">
-								<li>Documents</li>
-								<li>Arrays</li>
+						</div>
+						<div style="width:40%;display:inline-block;vertical-align:top;margin:10px;">
+							<ul style="font-size:50px;"> 
+								<li class="fragment" style="color:yellow;">
+									Rich Types
+									<ul style="line-height:.4em;">
+										<li>Documents</li>
+										<li>Arrays</li>
+									</ul>
+								</li>
 							</ul>
-						</li>
-					</ul>
+						</div>
+					</div>
 				</section>
 
 				<section>
 					<section>
 						<h1>Example: Library Application</h1>
 
-						<p> A sinatra web application for saving a collection of books.<p>
+						<p>An application for saving a collection of books.<p>
 					</section>
 					<section>
 						<img src="img/books_index.png" style="max-height:150%;"/>
@@ -138,17 +140,12 @@
 
 				<section class="center-image">
 					<section>
-						<h1 style="margin-bottom:0px;">Schema</h1>
-
-						<img src="http://yuml.me/28ffd2ae" style="max-height:150%;"/>
-					</section>
-					<section>
-						<h1>Schema - Book</h1>
+						<h1>Possible schema for a Book</h1>
 						<pre><code class="language-javascript small-size">
 book = {
-  "_id": ObjectId,
+  "_id": int,
   "title": string,
-  "author": ObjectId,
+  "author": int,
   "isbn": string,
   "slug": string,
   "publisher": {
@@ -161,7 +158,7 @@ book = {
   "summary": string,
   "subjects": [string, string]
   "notes": [{
-  	"user": ObjectId,
+  	"user": int,
   	"note": string
   }],
   "language": string
@@ -169,21 +166,22 @@ book = {
 						</code></pre>
 					</section>
 					<section>
-						<h1>Schema - Author</h1>
+						<h1>Possible Author schema</h1>
 						<pre><code class="language-javascript small-size">
 author = {
-	"_id": ObjectId,
-	"first_name": string,
-	"last_name": string
+  "_id": int,
+  "first_name": string,
+  "last_name": string
 }
 						</code></pre>
 					</section>
 					<section>
-						<h1>Schema - User</h1>
+						<h1>Possible User schema</h1>
 						<pre><code class="language-javascript small-size">
 user = {
-	"_id": ObjectId,
-	"username": string,
+  "_id": int,
+  "username": string,
+  "password": string
 }
 						</code></pre>
 					</section>
@@ -191,333 +189,387 @@ user = {
 
 				<section>
 					<section>
-						<h1>Query Samples</h1>
+						<h1>Some sample documents</h1>
 
 						<pre><code class="language-javascript small-size">
 > db.authors.findOne()
 {
-	_id : ObjectId("504963b83005c8f055000001"),,
-	first_name : "F. Scott",
-	last_name : "Fitgerald"
+  _id: 1,
+  first_name: "F. Scott",
+  last_name: "Fitgerald"
 }
 
 > db.users.findOne()
 {
-	_id : ObjectId("504a661b3005c813bf000001"),
-	username : "emily@10gen.com"
+  _id: 1,
+  username: "craig.wilson@10gen.com",
+  password: "slsjfk4odk84k209dlkdj90009283d"
 }
 						</code></pre>
 					</section>
 					<section>
 						<pre><code class="language-javascript small-size">
 > db.books.findOne()
-
 {
-	_id : ObjectId("5047845f6b3b9a63a14787b1"),
-	title : "The Great Gatsby",
-	slug : "9781857150193-the-great-gatsby",
-	author : ObjectId("5047845f6b3b9a63a14787b0"),
-	available : true,
-	isbn : "9781857150193",
-	pages : 176,
-	publisher : {
-		publisher_name : "Everyman’s Library",
-		date : ISODate("1991-09-19T00:00:00Z"),
-		publisher_city : "London"
-	},
-	summary : "Set in the post-Great War...",
-	subjects : ["Love stories", "1920s", "Jazz Age"],
-	notes : [
-             { user : ObjectId("50056fa73005c8079f3cd94f"), 
-               note : "One of the best..."},
-             { user : ObjectId("50056fa73005c8079f3cd908"), 
-               note : "It’s hard to..."}
-			],
-	language : "English"
+  _id: 1,
+  title: "The Great Gatsby",
+  slug: "9781857150193-the-great-gatsby",
+  author: 1,
+  available: true,
+  isbn: "9781857150193",
+  pages: 176,
+  publisher: {
+    publisher_name: "Everyman’s Library",
+    date: ISODate("1991-09-19T00:00:00Z"),
+    publisher_city: "London"
+  },
+  summary: "Set in the post-Great War...",
+  subjects: ["Love stories", "1920s", "Jazz Age"],
+  notes: [ 
+    { user: 1, note: "One of the best..."},
+    { user: 2, note: "It’s hard to..."}
+  ],
+  language: "English"
 }
 						</code></pre>
 					</section>
 				</section>
 				
-				
 				<section>
-					<h1>What should we keep in mind as we design this schema?</h1>
+					<h1>Is this the only way to structure the data?</h1>
 				</section>
 				
 				
 				<section>
 					<section>
-						<h1>Applied Principles and Patterns</h1>
+						<h1>Principles and Patterns</h1>
 						<div class="fragment">
-							<h3>Principle: Schema-less does NOT mean No-Schema</h3>
-							<ul>
-								<li class="fragment">
-									Schema is defined and expectations are set at the application level.
-									<pre><code class="language-javascript small-size">
+							<h3>Remember: Schema-free != No-Schema</h3>
+								<div class="fragment">
+									<p>Application-level defined schema (and expectations)</p>
+									<pre style="margin-top:10px;"><code class="language-javascript small-size">
 user = {
-	"_id": ObjectId,
-	"username": string,
+  "_id": int,
+  "username": string,
+  "password": string
 }
 									</code></pre>
-								</li>
-								<li class="fragment">
-									Design should take advantage of flexibility, only when appropriate.
-									<pre><code class="language-javascript small-size">
+								</div>
+								<br/>
+								<div class="fragment">
+									<p>Flexibility should be leveraged only when appropriate.</p>
+									<pre style="margin-top:10px;"><code class="language-javascript small-size">
 db.everything.find()
- {
-	_id : ObjectId,
-	first_name : "Jim",
-	last_name : "McJim"	
- }
- {
-	_id : "'66 mustang",
-	make : "Ford",
-	model : "Mustang",
-	year : "1966"
- }								</code></pre>
-								</li>
-							</ul>
+{
+  _id: 893,
+  first_name: "Jim",
+  last_name: "McJim"	
+}
+{
+  _id: "'66 mustang",
+  make: "Ford",
+  model: "Mustang",
+  year: "1966"
+}								</code></pre>
+							</div>
 						</div>
 					</section>
 					<section>
-						<h3>Principle: Use Rich Documents</h3>
+						<h3>Remember: Use Rich Documents (3 patterns)</h3>
 						<ul>
 							<li class="fragment">
-								Pattern: Embedded Documents
-								<pre><code class="language-javascript small-size">
-book.publisher : 
+								Embedded Documents
+								<pre style="margin-top:10px;"><code class="language-javascript small-size">
+book.publisher: 
 {
-  publisher_name : "Everyman’s Library",
-  date : ISODate("1991-09-19T00:00:00Z"),
-  city : "London",
+  publisher_name: "Everyman’s Library",
+  date: ISODate("1991-09-19T00:00:00Z"),
+  city: "London",
 },
 								</code></pre>
 							</li>
-							
-<aside class="notes">
-In general, use embedded documents when possible.
-Usually one embeds documents that seldom change and data that's not interesting enough to warrant a document of its own. 
-</aside> 
+
 			
 							<li class="fragment">
-								Pattern: Embedded Arrays
-								<pre><code class="language-javascript small-size">
-book.subjects : ["Love stories", "1920s", "Jazz Age"],
+								Embedded Arrays
+								<pre style="margin-top:10px;"><code class="language-javascript small-size">
+book.subjects: ["Love stories", "1920s", "Jazz Age"],
 								</code></pre>
 							</li>
-							
-<aside class="notes">
-Multi-key indexes - will index each element of the array.
-Query: db.books.find( { subject: { $all: [ 'Love stories', 'Jazz Age' ] } } )
-$addToSet and $pull to add and remove keys 
-Whether to embed positionally using an array or embedded doc is a matter of taste and depends on whether you want to use a multi-key index.
-</aside>
 
 							<li class="fragment">
-								Pattern: Embedded Arrays of Documents
-								<pre><code class="language-javascript small-size">
-book.notes : [
-	{ user : ObjectId("504a661b3005c813bf000001"), note : "One of the best..."},
-	{ user : ObjectId("504a661b3005c813bf000005"), note : "It’s hard to..."}
+								Embedded Arrays of Documents
+								<pre style="margin-top:10px;"><code class="language-javascript small-size">
+book.notes: [
+  { user: 1, note: "One of the best..."},
+  { user: 2, note: "It’s hard to..."}
 ],
 								</code></pre>
 							</li>
-							
-<aside class="notes">
-You can even index on keys inside embedded documents. 
-</aside>
-						</ul>
-					</section>
-					<section>
-						<h3>Principle: Take Advantage of Immutable Data</h3>
-						<ul>
-							<li class="fragment">
-								<pre><code class="language-javascript small-size">
-> db.users.findOne()
-{
-	_id : ObjectId("504a661b3005c813bf000001"),
-	username : "emily@10gen.com"
-}
-								</code></pre>
-								<br/>
-							<p style="margin-left:30px;">Example: username is unique and could be used as the primary key. </p>
-							</li>
-
-							<li class="fragment">
-								<pre><code class="language-javascript small-size">
-book.author : 
-{
-	first_name : "F. Scott",
-	last_name : "Fitzgerald",
-},
-								</code></pre>
-<br/>
-<p style="margin-left:30px;"> Example: author name probably won't change and could be embedded. </p>
-							</li>						
 						</ul>
 					</section>
 				</section>
+				
 				<section>
+					<h1>What is the next step?</h1>
+				</section>
+				
+				<section>
+										
 					<section>
-						<h1>Application Queries</h1>
+						<h1>Example Application Queries</h1>
 						<h3>Query for all the books by a specific author</h3>
 						<pre><code class="language-javascript small-size">
-> author = db.authors.findOne({first_name : "F. Scott", last_name : "Fitzgerald"});
+> author = db.authors.findOne({first_name: "F. Scott", last_name: "Fitzgerald"});
 
 > db.books.find({author: author._id})
 {
-	...	
+  ...	
 }
 {
-	...
+  ...
 }
 						</code></pre>	
 					</section>
 					
 					<section>
-						<h3>Alternatively, use an embedded document</h3>
-						<pre><code class="language-javascript small-size">
-> db.books.find({author.first_name : "F. Scott", author.last_name : "Fitzgerald"});
-
-{
-	...	
-}
-{
-	...
-}
-						</code></pre>
-					<br/>
-					<p style="margin-left:50px;"> Read-friendly - Only one query necessary.</p>	
-					</section>
-
-
-					<section>
 						<h3>Query for books by title</h3>
 						<pre><code class="language-javascript small-size">
 > db.books.find({title: "The Great Gatsby"})
 {
-	...	
+  ...	
 }
 						</code></pre>
 					</section>
 					<section>
-						<h3>As a user, see all the books in which I have made notes</h3>
+						<h3>Query for books in which I have made notes</h3>
 						<pre><code class="language-javascript small-size">
-> db.books.find({notes.user: ObjectId("504a661b3005c813bf000001")})
+> db.books.find({notes.user: 1})
 {
-	...	
+  ...	
 }
 {
-	...
+  ...
 }
 						</code></pre>
 					</section>
 				</section>
+				
 				<section>
+					<h1>What is the read usage of my data?</h1>
+						<img src="img/authors_index.png" style="max-height:120%;"/>
+				</section>
+				
+				<section>					
 					<section>
-						<h1>Schema Evolution for read-heavy use</h1>
-						<h3>Query for books by author first name</h3>
+						<h1>Schema Evolution for read-heavy use #1</h1>
+						<h3>Frequent queries for books given an author's first name</h3>
 						<pre><code class="language-javascript small-size">
-> authors = db.authors.find( { first_name : /^f.*/i }, {_id : 1})
+> authors = db.authors.find( { first_name: /^f.*/i })
 
-> authorIds = authors.map(function(x) { return x._id; })
+// for each author in authors, authorIds.append(author._id)
 
-> db.books.find({author: { $in : authorIds } })
+> db.books.find({author: { $in: authorIds } })
 {
-	...	
+  ...	
 }
 {
-	...
+  ...
 }
 						</code></pre>
 					</section>
 					<section>
-						<h3>Principle: Documents Should Reflect Query Patterns (Heavy-Reads)</h3>
+						<h3>Remember: Documents Should Reflect Query Patterns</h3>
 						<ul>
 							<li class="fragment">
 								Pattern: Partially Embedded Documents
 								<pre><code class="language-javascript small-size">
 book = {
-  _id: "int",
-  title: "string",
-  author: {
-  	*author : "ObjectId",
-  	name : "string"
+  "_id": int,
+  "title": string,
+  "author": {
+    "author": int,
+    "name": string
   },
   ...
 }
 								</code></pre>
 							</li>
 						<li class="fragment">
-							Query for books by author first name using an embedded document with cached name.
+							Query for books by an author's first name using an embedded document with cached name.
 							<pre><code class="language-javascript small-size">
-> db.books.find({author.name : /^f.*/i })
+> db.books.find({author.name: /^f.*/i })
 {
-	...	
+  ...	
 }
 {
-	...
+  ...
 }
 							</code></pre>
 						</ul>
-						
 					</section>
-
-					
-					
+				</section>
+				<section>
 					<section>
-						<h3>Think about indexes and sharding</h3>
+						<h1>Schema Evolution for read-heavy use #2</h1>
+						<h3>Frequent queries for a book's notes</h3>
+						<pre><code class="language-javascript small-size">
+> db.books.find({title: "The Great Gatsby"}, {_notes: 1})
+{
+  _id: 1,
+  notes: [
+    { user: 1, note: "One of the best..."},
+    { user: 2, note: "It’s hard to..."}
+  ]
+}
+						</code></pre>
+					</section>
+					<section>
+						<h3>Remember: Take Advantage of Immutable Data</h3>
 						<ul>
 							<li class="fragment">
-								Multi-key indexes.
-							</li>
-							<li class="fragment">
-								Secondary indexes.
-							</li>
-							<li class="fragment">
-								Shard key choice.
-							</li>
-								<ul class="fragment">
-									<li> 
-										All docs must contain the shard key
-									</li>
-									<li> 
-										Shard key values are immutable once the doc is inserted
-									</li>		
-									<li> 
-										Think about how you will query using the shard key
-									</li>		
-									<li> 
-										Make sure sorting by shard key can be efficient
-									</li>		
-									<li> 
-										Unique indexes must be prefixed by the shard key
-									</li>
-								</ul></li>
-						</ul>
+								Username is the natural key and is immutable
+								<pre><code class="language-javascript small-size">
+user = {
+  "_id": string,
+  "password": string
+}
 
+book = {
+  // ...
+  "notes": [{
+    "user": string,
+    "note": string
+  }],
+  // ...
+}
+								</code></pre>
+							</li>
+							<li class="fragment">
+								Query for a book's notes
+								<pre><code class="language-javascript small-size">
+> db.books.find({title: "The Great Gatsby"}, {_notes: 1})
+{
+  _id: 1,
+  notes: [
+    { user: "craig.wilson@10gen.com", note: "One of the best..."},
+    { user: "jmcjack@mcjack.com", note: "It’s hard to..."}
+  ]
+}
+								</code></pre>
+							</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h1>Schema Evolution for read-heavy use #3</h1>
+						<h3>Users want to comment on other people's notes</h3>
+						<pre class="fragment"><code class="language-javascript small-size">
+bookNotes = {
+  "_id": int, 
+  "book": int, // this is the book id
+  "note_count": int,
+  "last_changed": datetime,
+  "notes": [{
+    "user": string,
+    "note": string,
+    "comments": [{
+      "user": string,
+      "text": string,
+      "replies": [{
+        "user": string,
+        "text": string,
+        "replies": [{...}]
+      }]
+    }]
+  }]
+}
+						</code></pre>
+					</section>
+					
+					<section>
+						<h3>Why store a tree like this?</h3>
+						<ul class="fragment">
+							<li>
+								Single document for all comments on a note.
+							</li>
+							<li>
+								Single location on disk for the whole tree.
+							</li>
+							<li>
+								Legible tree structure.
+							</li>
+						</ul>
+						<br/>
+						<h3 class="fragment">What are the drawbacks of storing a tree in this way?</h3>
+						<ul class="fragment">
+							<li>
+								Difficult to search.
+							</li>
+							<li>
+								Difficult to get back partial results.
+							</li>
+							<li>
+								Document can get large very quickly.
+							</li>
+						</ul>
+					</section>
+							
+					<section>
+						<h1>There is no formula. <br/>Maybe store arrays of ancestors?</h1>
+						<pre><code class="language-javascript small-size">
+> t = db.mytree;
+
+> t.find()
+{ _id: "a" }
+{ _id: "b", ancestors: [ "a" ], parent: "a" }
+{ _id: "c", ancestors: [ "a", "b" ], parent: "b" }
+{ _id: "d", ancestors: [ "a", "b" ], parent: "b" }
+{ _id: "e", ancestors: [ "a" ], parent: "a" }
+{ _id: "f", ancestors: [ "a", "e" ], parent: "e" }
+{ _id: "g", ancestors: [ "a", "b", "d" ], parent: "d" }
+
+						</code></pre>
+						<br />
+						<h3 class="fragment">How would you do it?</h3>
 					</section>
 					
 				</section>
- <aside class="notes">
-All docs must have the shard key
-Shard key values are immutable once the doc is inserted
-How will your query using the shard key
-Make sure that sorting by shard key can be efficient 
- </aside>				
- 
+				<section>
+					<h1>Read-heavy schemas</h1>
+					<h3>Don't forget to think about indexes and sharding</h3>
+					<ul class="fragment">
+						<li>
+							Multi-key indexes.
+						</li>
+						<li>
+							Secondary indexes.
+						</li>
+						<li>
+							Shard key choice.
+						</li>
+					</ul>
+
+				</section>
+				
+				<section>
+					<h1>What about writes?</h1>
+						IMAGE
+				</section>
+				
 				<section>
 					<section>
 						<h1>Schema Evolution for write-heavy use</h1>
 						<h3>Add notes to a book</h3>
 						<pre><code class="language-javascript small-size">
-> note = { user: ObjectId("504a661b3005c813bf000001"), "I did NOT like this book." }
+> note = { user: "craig.wilson@10gen.com", "I did NOT like this book." }
 
-> db.books.update({ _id : 1 }, { $push : { notes : note }})
+> db.books.update({ _id: 1 }, { $push: { notes: note }})
 						</code></pre>
 					</section>
 					<section>
-						<h3>Principle: Take Advantage of Atomic Operations</h3>
+						<h3>Remember: Take Advantage of Atomic Operations</h3>
 						<ul class="fragment">
 							<li>$set - set a value</li>
 							<li>$unset - unsets a value</li>
@@ -532,95 +584,66 @@ Make sure that sorting by shard key can be efficient
 						</ul>
 					</section>
 					<section>
-						<h3>Anti-pattern: Continually Growing Documents (Heavy-Writes)</h3>
+						<h3>Think about anti-patterns: Continually Growing Documents</h3>
 						<ul>
-							<li class="fragment">Because of the limit on document size, documents-- including the top-level content and all subdocuments-- cannot grow beyond 16 megabytes.</li>
-							<li class="fragment">Storage fragmentation and degraded update performance while MongoDB migrates documents internally.</li>
-							<li class="fragment">Documents can grow to become unnecessarily large.</li>
+							<li class="fragment">Document size limit.</li>
+							<li class="fragment">Storage fragmentation and update performance.</li>
 						</ul>
 						<br/>
 						<h3 class="fragment">What is an alternative to storing the notes in an array?</h3>
 					</section>
+					
 					<section>
-						<h3>Possible Solution</h3>
-						<ul>
-							<li>
-								Move <code>notes</code> to another document, with one document per book id.
+						<h3>Possible Solution: Linking</h3>
+						<p>Move notes to a notes collection.</p>
 								<pre><code class="language-javascript small-size">
 book = {
-  _id: "ObjectId",
+  "_id": int,
   ... // remove the notes field
 }
 
 bookNotes = {
-  _id : "ObjectId",
-  book : "ObjectId", // this will be the same as the book id...
-  notes : [{
-    *user : "ObjectId",
-    note : "string"
-  }]
+  "_id": int, 
+  "book": int, // this will be the same as the book id...
+  "date": timestamp,
+  "user": string,
+  "note": string
 }
 								</code></pre>
-							</li>
-							<li class="fragment">Keeps the <code>book</code> document size consistent.</li>
-							<li class="fragment">Queries for <code>books</code> don't return all the <code>notes</code>.</li>
-							<li class="fragment">Still suffers from a continually growing <code>bookNote</code> document.</li>
-						</ul>
-	
-</section>
-					<section>
-						<h3>Possible Solution</h3>
-						<ul>
-							<li>
-								Move <code>notes</code> to another document, with one document per book note.
-								<pre><code class="language-javascript small-size">
-book = {
-  _id: "ObjectId",
-  ... // remove the notes field
-}
-
-bookNotes = {
-  _id : "ObjectId", // this will be the same as the book id...
-  *user : "ObjectId",
-  note : "string"
-}
-								</code></pre>
-							</li>
-							<li class="fragment">Keeps the <code>book</code> document size consistent.</li>
-							<li class="fragment">Queries for <code>books</code> don't return all the <code>notes</code>.</li>
-							<li class="fragment">Notes not necessarily near each other on disk. Possibly slow reads.</li>
+						<ul class="fragment">
+							<li>Book document size is consistent.</li>
+							<li>Queries for books don't return all the notes.</li>
+							<li>Possible slow reads.</li>
 						</ul>
 					</section>
 					
 					<section>
-						<h3>Pattern: Bucketing</h3>
-						<ul>
-							<li class="fragment">
-								<code>bookNotes</code> contains a maximum number of documents
+						<h3>Possible solution: Bucketing</h3>
+						<p>bookNotes contains a limited-size array</p>
 								<pre><code class="language-javascript small-size">
 bookNotes = {
-  _id : "ObjectId", 
-  book: "ObjectId", // this is the book id
-  note_count: "int",
-  last_changed : "UTC datetime",
-  notes : [{
-    *user : "ObjectId",
-    note : "string"
+  "_id": int, 
+  "book": int, // this is the book id
+  "note_count": int,
+  "last_changed": datetime,
+  "notes": [{
+    "user": string,
+    "note": string
   }]
 }
 								</code></pre>
-							</li>
+						<ul>
 							<li class="fragment">
-								Still use atomic operations to update an existing document or start a new one
+								Atomic operations for updating or creating
 								<pre><code class="language-javascript small-size">
-> note = { user: ObjectId("504a661b3005c813bf000001"), "I did NOT like this book." }
+> note = { user: "craig.wilson@10gen.com", "I did NOT like this book." }
 
 > db.bookNotes.update({
-	{ book : ObjectId("5047845f6b3b9a63a14787b1"), note_count { $lt : 10 } },
+	{ book: 1, note_count { $lt: 10 } },
 	{ 
-		$inc : { note_count : 1 }, 
-		$push { notes : note }, 
-		$set : { last_changed : new Date() } 
+		$inc: { note_count: 1 }, 
+		$push { notes: note }, 
+		$set: { last_changed: new Date() } 
 	},
 	true // upsert
 })
@@ -630,88 +653,18 @@ bookNotes = {
 					</section>
 				</section>
 
-					<section>
-						<section>
-							<h1>Storing a tree</h1>
-							<p class="fragment">How can we model a <code>bookNotes</code> with comments?</p>
-							<pre class="fragment"><code class="language-javascript small-size">
-	bookNotes = {
-	  _id : "ObjectId", 
-	  book: "ObjectId", // this is the book id
-	  note_count: "int",
-	  last_changed : "UTC datetime",
-	  *user : "ObjectId",
-	  note : "string",
-	  comments: [
-	    {user: "mathias", text: "...", replies: []}
-	    {user: "eliot", text: "...", replies: [
-	       {user: "mike", text: "...", replies: []}
-	    ]}
-	  ]
-	}
-
-									</code></pre>
-						</section>
-					
-					
-					<section>
-						<h3>What benefits does this provide?</h3>
-						<ul>
-							<li class="fragment">
-								Single document for all comments on a note.
-							</li>
-							<li class="fragment">
-								Single location on disk for the whole tree.
-							</li>
-							<li class="fragment">
-								Legible tree structure.
-							</li>
-						</ul>
-						<br/>
-						<h3 class="fragment">What are the drawbacks of storing a tree in this way?</h3>
-						<ul>
-							<li class="fragment">
-								Difficult to search.
-							</li>
-							<li class="fragment">
-								Difficult to get back partial results.
-							</li>
-							<li class="fragment">
-								Document can get large very quickly.
-							</li>
-						</ul>
-					</section>
-							
-
-					<section>
-						<h1>Alternative solution: <br/>Store arrays of ancestors</h1>
-						<pre><code class="language-javascript small-size">
-> t = db.mytree;
-
-> t.find()
-{ "_id" : "a" }
-{ "_id" : "b", "ancestors" : [ "a" ], "parent" : "a" }
-{ "_id" : "c", "ancestors" : [ "a", "b" ], "parent" : "b" }
-{ "_id" : "d", "ancestors" : [ "a", "b" ], "parent" : "b" }
-{ "_id" : "e", "ancestors" : [ "a" ], "parent" : "a" }
-{ "_id" : "f", "ancestors" : [ "a", "e" ], "parent" : "e" }
-{ "_id" : "g", "ancestors" : [ "a", "b", "d" ], "parent" : "d" }
-
-					</code></pre>
-						
-						<br/>
-						<h3 class="fragment">How would you do it?</h3>
-					</section>
-					
-				</section>
+				
 				
 				<section>
-					<h1>Schema design in mongoDB</h1>
+					<h2>Your application + your schema + mongodb = <3</h2>
 					<br/>
-					<h2 class="fragment">Basic design principles apply.</h2><br/>
-					<h2 class="fragment">Focus on how your application uses and changes the data when designing a schema.</h2><br/>
-					<h2 class="fragment">Take advantage of the flexibility and features of mongoDB.</h2><br/>
-					<h2 class="fragment">Anticipate document and collection growth over time.</h2>
+					<div class="fragment">
+						<h2>Basic design principles apply.</h2><br/>
+						<h2>Focus on how your application uses the data.</h2><br/>
+						<h2>Anticipate document and collection growth.</h2><br/>
+						<h2>Take advantage of the mongodb's flexibility and features</h2>
+					</div>
+				
 				</section>
 				
 			</div>
