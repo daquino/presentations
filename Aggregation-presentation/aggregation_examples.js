@@ -119,7 +119,7 @@ var ex6 = db.books.aggregate(
 );
 
 
-// Using project to create a new field with computed value
+// Using project to create a new field with computed values
 // eq is a two-operand expression.  $add can have any number of operands.
 var ex7 = db.books.aggregate(
 	{ $project : 
@@ -151,7 +151,8 @@ var ex8 = db.books.aggregate(
 );
 
 
-// Nested computed expressions
+// Nested computed expressions.
+// $ifNull returns the first value if it's not null, otherwise, returns second value
 var ex9 = db.books.aggregate(
 	{ $project : { 
 		_id : 0,
