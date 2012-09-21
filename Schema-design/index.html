@@ -132,6 +132,7 @@
 					</section>
 					<section>
 						<img src="img/books_index.png" style="max-height:150%;"/>
+						<a href="http://librarywiki.herokuapp.com">library</a>
 					</section>
 					<section>
 						<img src="img/authors_index.png" style="max-height:150%;"/>
@@ -242,12 +243,12 @@ user = {
 				
 				<section>
 					<section>
-						<h1>Principles and Patterns</h1>
+						<h1 style="margin-bottom:10px;">Principles and Patterns</h1>
 						<div class="fragment">
 							<h3>Remember: Schema-free != No-Schema</h3>
 								<div class="fragment">
 									<p>Application-level defined schema (and expectations)</p>
-									<pre style="margin-top:10px;"><code class="language-javascript small-size">
+									<pre style="margin-top:2px;font-size:13px;"><code class="language-javascript small-size">
 user = {
   "_id": int,
   "username": string,
@@ -255,11 +256,10 @@ user = {
 }
 									</code></pre>
 								</div>
-								<br/>
+								
 								<div class="fragment">
 									<p>Flexibility should be leveraged only when appropriate.</p>
-									<pre style="margin-top:10px;"><code class="language-javascript small-size">
-db.everything.find()
+									<pre style="margin-top:2px;font-size:13px;"><code class="language-javascript small-size">db.everything.find()
 {
   _id: 893,
   first_name: "Jim",
@@ -270,7 +270,7 @@ db.everything.find()
   make: "Ford",
   model: "Mustang",
   year: "1966"
-}								</code></pre>
+}	</code></pre>
 							</div>
 						</div>
 					</section>
@@ -279,32 +279,30 @@ db.everything.find()
 						<ul>
 							<li class="fragment">
 								Embedded Documents
-								<pre style="margin-top:10px;"><code class="language-javascript small-size">
+								<pre style="margin-top:10px;font-size:13px;"><code class="language-javascript small-size">
 book.publisher: 
 {
   publisher_name: "Everyman’s Library",
   date: ISODate("1991-09-19T00:00:00Z"),
   city: "London",
-},
-								</code></pre>
+},</code></pre>
 							</li>
 
 			
 							<li class="fragment">
 								Embedded Arrays
-								<pre style="margin-top:10px;"><code class="language-javascript small-size">
+								<pre style="margin-top:10px;font-size:13px;"><code class="language-javascript small-size">
 book.subjects: ["Love stories", "1920s", "Jazz Age"],
 								</code></pre>
 							</li>
 
 							<li class="fragment">
 								Embedded Arrays of Documents
-								<pre style="margin-top:10px;"><code class="language-javascript small-size">
+								<pre style="margin-top:10px;font-size:13px;"><code class="language-javascript small-size">
 book.notes: [
   { user: 1, note: "One of the best..."},
   { user: 2, note: "It’s hard to..."}
-],
-								</code></pre>
+],</code></pre>
 							</li>
 						</ul>
 					</section>
@@ -328,8 +326,7 @@ book.notes: [
 }
 {
   ...
-}
-						</code></pre>	
+}</code></pre>	
 					</section>
 					
 					<section>
@@ -379,11 +376,11 @@ book.notes: [
 						</code></pre>
 					</section>
 					<section>
-						<h3>Remember: Documents Should Reflect Query Patterns</h3>
+						<h2>Remember: Documents Should Reflect Query Patterns</h2>
 						<ul>
 							<li class="fragment">
 								Pattern: Partially Embedded Documents
-								<pre><code class="language-javascript small-size">
+								<pre><code class="language-javascript small-size" style="font-size:13px;">
 book = {
   "_id": int,
   "title": string,
@@ -392,20 +389,17 @@ book = {
     "name": string
   },
   ...
-}
-								</code></pre>
+}</code></pre>
 							</li>
 						<li class="fragment">
 							Query for books by an author's first name using an embedded document with cached name.
-							<pre><code class="language-javascript small-size">
-> db.books.find({author.name: /^f.*/i })
+							<pre style="margin-top:8px;"><code class="language-javascript small-size" style="font-size:13px;">> db.books.find({author.name: /^f.*/i })
 {
   ...	
 }
 {
   ...
-}
-							</code></pre>
+}</code></pre>
 						</ul>
 					</section>
 				</section>
@@ -425,12 +419,11 @@ book = {
 						</code></pre>
 					</section>
 					<section>
-						<h3>Remember: Take Advantage of Immutable Data</h3>
-						<ul>
+						<h2 style="margin-bottom:10px;">Remember: Take Advantage of Immutable Data</h2>
+						<ul style="margin-top:5px;">
 							<li class="fragment">
 								Username is the natural key and is immutable
-								<pre><code class="language-javascript small-size">
-user = {
+								<pre style="margin-top:8px;"><code class="language-javascript small-size" style="font-size:15px;">user = {
   "_id": string,
   "password": string
 }
@@ -442,21 +435,18 @@ book = {
     "note": string
   }],
   // ...
-}
-								</code></pre>
+}</code></pre>
 							</li>
-							<li class="fragment">
+							<li class="fragment" style="margin-top:5px;">
 								Query for a book's notes
-								<pre><code class="language-javascript small-size">
-> db.books.find({title: "The Great Gatsby"}, {_notes: 1})
+								<pre style="margin-top:8px;"><code class="language-javascript small-size" style="font-size:13px;">> db.books.find({title: "The Great Gatsby"}, {_notes: 1})
 {
   _id: 1,
   notes: [
     { user: "craig.wilson@10gen.com", note: "One of the best..."},
     { user: "jmcjack@mcjack.com", note: "It’s hard to..."}
   ]
-}
-								</code></pre>
+}</code></pre>
 							</li>
 						</ul>
 					</section>
@@ -489,7 +479,7 @@ bookNotes = {
 					</section>
 					
 					<section>
-						<h3>Why store a tree like this?</h3>
+						<h2>Why store a tree like this?</h2>
 						<ul class="fragment">
 							<li>
 								Single document for all comments on a note.
@@ -502,7 +492,7 @@ bookNotes = {
 							</li>
 						</ul>
 						<br/>
-						<h3 class="fragment">What are the drawbacks of storing a tree in this way?</h3>
+						<h2 class="fragment">What are the drawbacks of storing a tree in this way?</h2>
 						<ul class="fragment">
 							<li>
 								Difficult to search.
@@ -555,7 +545,7 @@ bookNotes = {
 				
 				<section>
 					<h1>What about writes?</h1>
-						IMAGE
+						<img src="img/add_note.png" style="max-height:150%;"/>
 				</section>
 				
 				<section>
@@ -569,8 +559,8 @@ bookNotes = {
 						</code></pre>
 					</section>
 					<section>
-						<h3>Remember: Take Advantage of Atomic Operations</h3>
-						<ul class="fragment">
+						<h2>Remember: Take Advantage of Atomic Operations</h2>
+						<ul class="fragment" style="font-size:15px;">
 							<li>$set - set a value</li>
 							<li>$unset - unsets a value</li>
 							<li>$inc - increment an integer</li>
@@ -584,7 +574,7 @@ bookNotes = {
 						</ul>
 					</section>
 					<section>
-						<h3>Think about anti-patterns: Continually Growing Documents</h3>
+						<h2>Think about anti-patterns: Continually Growing Documents</h2>
 						<ul>
 							<li class="fragment">Document size limit.</li>
 							<li class="fragment">Storage fragmentation and update performance.</li>
@@ -594,7 +584,7 @@ bookNotes = {
 					</section>
 					
 					<section>
-						<h3>Possible Solution: Linking</h3>
+						<h2>Possible Solution: Linking</h2>
 						<p>Move notes to a notes collection.</p>
 								<pre><code class="language-javascript small-size">
 book = {
@@ -620,7 +610,7 @@ bookNotes = {
 					<section>
 						<h3>Possible solution: Bucketing</h3>
 						<p>bookNotes contains a limited-size array</p>
-								<pre><code class="language-javascript small-size">
+								<pre style="margin-top:10px;"><code class="language-javascript small-size">
 bookNotes = {
   "_id": int, 
   "book": int, // this is the book id
@@ -630,13 +620,9 @@ bookNotes = {
     "user": string,
     "note": string
   }]
-}
-								</code></pre>
-						<ul>
-							<li class="fragment">
-								Atomic operations for updating or creating
-								<pre><code class="language-javascript small-size">
-> note = { user: "craig.wilson@10gen.com", "I did NOT like this book." }
+}</code></pre>
+						<p>Atomic operations for updating or creating</p>
+								<pre style="margin-top:10px;"><code class="language-javascript small-size">> note = { user: "craig.wilson@10gen.com", "I did NOT like this book." }
 
 > db.bookNotes.update({
 	{ book: 1, note_count { $lt: 10 } },
@@ -646,17 +632,14 @@ bookNotes = {
 		$set: { last_changed: new Date() } 
 	},
 	true // upsert
-})
-							</code></pre>
-							</li>
-						</ul>
+})</code></pre>
 					</section>
 				</section>
 
 				
 				
 				<section>
-					<h2>Your application + your schema + mongodb = <3</h2>
+					<h2>Your (application + schema) + mongodb = <3</h2>
 					<br/>
 					<div class="fragment">
 						<h2>Basic design principles apply.</h2><br/>
