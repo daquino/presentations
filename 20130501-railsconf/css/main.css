@@ -1,0 +1,102 @@
+.reveal pre {
+    margin-bottom: 30px;
+} 
+
+.reveal pre > code > .code-highlight {
+    background-color: lightgrey;   
+}
+
+section[data-state="title"] h1 {
+    color: #363636;
+}
+
+section[data-state="title"] p.bio {
+    display: inline-block;
+    margin-top: 1.5em;
+    padding-left: 4em;
+    height: 3em;
+    font-size: 80%;
+    background-image: url("../img/emily_cartoon.jpeg");
+    background-position: left;
+    background-repeat: no-repeat;
+    background-size: contain;
+	color :black;
+	text-align: left;
+}
+
+@media screen {
+
+    .dosdonts .state-background {
+        background-position: top;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-color: white;
+    }
+
+    .dosdonts  .state-background {
+        background-image: url("../img/dos_donts.jpg");
+    }
+    .raspberry-pi .state-background {
+        background-position: top;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .raspberry-pi .state-background {
+        background-image: url("../img/raspberry_pi.png");
+    }
+
+    .power-pose .state-background {
+        background-position: top;
+        background-repeat: no-repeat;
+        background-size: 700px;
+        background-color: white;
+    }
+
+    .power-pose  .state-background {
+        background-image: url("../img/power_pose.jpg");
+    }
+
+    .barbie .state-background {
+        background-position: top;
+        background-repeat: no-repeat;
+        background-size: 700px;
+        background-color: white;
+    }
+
+    .barbie  .state-background {
+        background-image: url("../img/cs_barbie.jpg");
+    }
+
+    section.bg {
+        background: rgba(0,0,0,0.36);
+    }
+	section.bg h1,p {
+	    color: white;
+	}
+}
+
+section.ul-2col > ul {
+    width: 100%;
+}
+
+section.ul-2col > ul > li {
+    float: left;
+    margin-top: 1em;
+    width: 49%;
+}
+
+section.ul-2col > ul > li:nth-child(odd) {
+    clear: left;
+}
+
+span.do-dont {
+    color: #4169E1;
+}
+
+.reveal p {
+	color: black;
+}
+
+section[data-state="final"] ul { margin-top: 2em; }
+section[data-state="final"] h3 { margin-top: 1.5em; }
