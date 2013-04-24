@@ -37,6 +37,17 @@ section[data-state="title"] p.bio {
         background-image: url("../img/roadmap.png");
     }
 
+    .classphoto .state-background {
+        background-position: top;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-color: white;
+    }
+
+    .classphoto  .state-background {
+        background-image: url("../img/classphoto.jpg");
+    }
+
     section.bg-image {
         background: rgba(0,0,0,0.36);
     }
@@ -63,18 +74,31 @@ section.ul-2col > ul > li:nth-child(odd) {
     clear: left;
 }
 
-span.do-dont {
-    color: #4169E1;
-}
-
 .reveal p {
 	color: black;
+}
+
+.reveal p.source{
+    color: grey;
+    font-size: 50%;
 }
 
 .reveal blockquote {
     background: #EEE8CD;
     color: black;
     opacity: 20%;
+}
+
+.reveal .slides section .fragment.grow {
+    opacity: 1;
+}
+
+.reveal .slides section .fragment.grow.visible {
+        -webkit-transform: scale( 1.3 );
+           -moz-transform: scale( 1.3 );
+            -ms-transform: scale( 1.3 );
+             -o-transform: scale( 1.3 );
+                transform: scale( 1.3 );
 }
 
 div span.arrow {
