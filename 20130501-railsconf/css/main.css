@@ -14,7 +14,7 @@ section[data-state="title"] p.bio {
     display: inline-block;
     margin-top: 1.5em;
     padding-left: 4em;
-    height: 3em;
+    height: 4em;
     font-size: 80%;
     background-image: url("../img/emily_cartoon.jpeg");
     background-position: left;
@@ -26,54 +26,27 @@ section[data-state="title"] p.bio {
 
 @media screen {
 
-    .dosdonts .state-background {
+    .roadmap .state-background {
         background-position: top;
         background-repeat: no-repeat;
         background-size: cover;
         background-color: white;
     }
 
-    .dosdonts  .state-background {
-        background-image: url("../img/dos_donts.jpg");
-    }
-    .raspberry-pi .state-background {
-        background-position: top;
-        background-repeat: no-repeat;
-        background-size: cover;
+    .roadmap  .state-background {
+        background-image: url("../img/roadmap.png");
     }
 
-    .raspberry-pi .state-background {
-        background-image: url("../img/raspberry_pi.png");
-    }
-
-    .power-pose .state-background {
-        background-position: top;
-        background-repeat: no-repeat;
-        background-size: 700px;
-        background-color: white;
-    }
-
-    .power-pose  .state-background {
-        background-image: url("../img/power_pose.jpg");
-    }
-
-    .barbie .state-background {
-        background-position: top;
-        background-repeat: no-repeat;
-        background-size: 700px;
-        background-color: white;
-    }
-
-    .barbie  .state-background {
-        background-image: url("../img/cs_barbie.jpg");
-    }
-
-    section.bg {
+    section.bg-image {
         background: rgba(0,0,0,0.36);
     }
-	section.bg h1,p {
+	section.bg-image h1,p {
 	    color: white;
 	}
+
+    section.outline h1,p {
+        color: #8B3A3A;
+    }
 }
 
 section.ul-2col > ul {
@@ -96,6 +69,18 @@ span.do-dont {
 
 .reveal p {
 	color: black;
+}
+
+.reveal blockquote {
+    background: #EEE8CD;
+    color: black;
+    opacity: 20%;
+}
+
+div span.arrow {
+    vertical-align: 125px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 section[data-state="final"] ul { margin-top: 2em; }
