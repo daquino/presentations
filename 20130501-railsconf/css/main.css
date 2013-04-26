@@ -26,28 +26,6 @@ section[data-state="title"] p.bio {
 
 @media screen {
 
-    .roadmap .state-background {
-        background-position: top;
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-color: white;
-    }
-
-    .roadmap  .state-background {
-        background-image: url("../img/roadmap.png");
-    }
-
-    .classphoto .state-background {
-        background-position: top;
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-color: white;
-    }
-
-    .classphoto  .state-background {
-        background-image: url("../img/classphoto.jpg");
-    }
-
     section.bg-image {
         background: rgba(0,0,0,0.36);
     }

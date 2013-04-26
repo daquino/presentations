@@ -1,0 +1,198 @@
+Notes:
+
+Hacking the Academic Experience:
+  Introduce yourself
+    Work on Ruby driver at 10gen
+    Teach Ruby on Rails in the CS department at Columbia
+  This talk came about after reflecting on my experience teaching Rails for 3 semesters.
+
+
+If I were to define a problem motivating this talk, I would say that it was that I didn't learn how to program until I was doing a masters in museum studies at the Louvre.  Even with a CS degree.
+
+
+Speaking of degrees, my background has both traditional and untraditional elements.
+  Currently working at 10gen on the Ruby driver to MongoDB
+  Previously, worked as full stack developer at a startup in NYC that sells artwork online.
+  Before that, I did a Masters in Museum Studies at the Louvre.  I ended up spending more time coding during this degree but I'll talk about that in a bit.
+  Following my graduation from college, I worked as a business consultant.
+  Double degree in Computer Science and Art History.
+
+
+Why am I listing my resume?  I do have a degree in Computer Science, worked professionally, and then went back and am teaching at my alma mater.
+  I have a unique perspective.
+  Background on course: elective course, about 50 students, hold office hours on the weekend, 1 TA
+  Can't talk about teaching and Ruby without mentioning _why the luck stiff.
+    writer, cartoonist, programmer, artist, arguable performance artist
+    key figure in Ruby community
+    2009 terminated all instances of his public and online presence
+    Best known for why's poignant guide to Ruby, which teaches Ruby with stories
+    Big advocate for the democratization of coding and increasing access to education of coding
+    Specifically, in 2009 at the Art and Code symposium at Carnegie Mellon University, he said that we really need hybrid programmer-teachers to teach coding, not just teachers.  Or programmers who are crazy.
+    So my point is, I might be crazy, but I agree with why.
+
+
+Academia && Hacking
+  Talk about how I got to teaching Rails at Columbia
+  How I developed a hacker-centric curriculum and why
+  How you can get involved
+
+
+Louvre materials project
+  As I provocatively mentioned before, I didn't really learn how to code until I was doing a Masters in museum studies at the Louvre.  What do I mean by this?
+  In the two year program, I had to spend the second year working full time in an internship and then write a thesis paper.
+  Contact the technology lab at the Louvre's art conservation department and worked to build a system to log samplings taken from artworks.  The app had real value when it could be linked back to metadata in an existing system on the artworks themselves and data collected from analyses.
+  Spent about 6 months teaching myself Rails, MySQL, and web development to build this system.  All in French.
+  Going into the internship, I thought I knew what I was doing.  I had a degree in CS.
+
+
+My roadmap was blank.  Literally no knowledge of web dev and had to learn it all on the job.
+  I didn't even know how to plan out the project.
+
+
+My only option was to teach myself and find resources from which I could learn.
+
+
+A few things in particular allowed me to be successful.
+  Paris, at the time, didn't have nearly as many community resources as NYC does.  I particularly appreciate the resources NYC has.
+
+
+The experience prepared me to some extent for the job that I then took in NYC.
+  After taking a job as a full-stack web developer, I realized that I relied more on the skills I learned in my Louvre internship than those that I learned in doing a CS degree.
+  For example, I'd like to share an anecdote of my first experience writing a cron job.
+    ...story...
+    I don't encourage everyone to make such mistakes, but being comfortable making mistakes and being able to react quickly to correct them is something I definitely would categorize as a "hacking skill"
+
+
+Rails class is an opportunity for me to fill in the holes
+  Back to the present..
+  When I started teaching, I focused on teaching Rails.
+  I realized I assumed students knew how to use the internet to look up errors, documentation, example projects, etc.
+  I've altered the course content a bit to teach more how to think like a hacker in Ruby on Rails, than just Ruby on Rails.
+  I wish the course were called "Hacking in Ruby on Rails"
+
+
+This class is rare, and not just at Columbia
+  It's difficult to get numbers on how many universities have web dev or Rails in their curriculum, but I checked a few.
+  MIT doesn't have a web dev or Rails course
+  Berkeley doesn't have web dev or Rails, focuses on research knowledge
+  Columbia doesn't have any other web dev classes
+  Carnegie Mellon doesn't have web dev or Rails
+  MY CLASS IS ONLY HALF A SEMESTER LONG
+
+
+You might argue that popular, trendy technologies have no place in academia.
+  I agree to some extent.
+  Foundations of Computer Science are essential.  For example, knowing how to analyze an algorithm.
+  A generation in tech is shorter than one in other industries, academic would be wasting its time if it revamp its curriculum with each new trend.
+
+
+I tried to develop a hacker-centric curriculum
+  The best I could do
+
+
+The term Hacker
+  The first problem - I don't think my students really knew what it meant to be a hacker.
+  For example, I gave a presentation a few weeks ago and mentioned a "hacker-centric curriculum" and someone who worked in security was appalled that I would teach that in a classroom.  I then realized we had differing definitions of "hacker"
+  The term has different meanings depending on it's contexts.
+    Historically:
+      Originally meant someone messing around with something in the positive sense
+      Then meant someone who subverts computer security to a malicious end
+      User it to mean playful cleverness, loves programming, trying new things, associated with free and open source software, sharing
+        - take a penny, leave a penny mindset
+  Mark Zuckerberg describes it really well in the code.org video.  He says he wanted to build something and looked up stuff whenever he got stuck.  He didn't try to learn all of CS at once.
+
+
+Hacker-centric curriculum is critical in the industry
+  Associated with the agile development process, which is widely used
+  Companies are hiring flexible programmers who can adapt quickly to change
+  10gen identifies its culture as a "hacker culture"
+  Etsy literally has a job title "Office Hacker" and "Intrinsically Motivated Full Stack Product Hacker"
+
+
+Columbia misses skills needed on the job
+  To confirm some of what I was thinking, I used an app called pollyeverywhere to ask my class 5 questions.
+    1) Is this class different from other classes you've taken at Columbia, and if so, how?
+      97% said yes.
+      Word map, the word practical came up a lot, modern
+      more modern, less rigid, more creative, solving own problems, less focus on grading
+    2) If you've had an internship, do you feel you had all the necessary skills or that you were lacking in a particular area?
+      96% said yes
+      collaboration, version control, ask questions, learn from others, APIs, Unix, semantic versioning, writing clean code
+    3) Do you participate in hackathons?
+      50%/50%
+      Reason they don't is because they don't feel like they have any knowledge to practice
+      I wanted to make sure that I didn't happen to get a sampling of students never exposed to the hacker culture.  As it turns out, all of them know what a hackathon is and have made the choice not to go.
+      If many of them have been exposed to the hacker culture, why don't they have hacker skills?
+    4) Have you used open source software before this class?
+      I thought maybe they wouldn't be familiar with hacking skills because they hadn't had an intro to open source software.
+      Most had.
+    5) Did you have a github account before this class
+      90% yes, but most of the yes's didn't use it for class.
+      I was talking to a student about an interview he was going to have and he said that he was so going to submit a zip file of source code and I encouraged him to use github.
+
+
+So you can actually do something about this.  And get something out of it!
+
+
+5 Hacker Habits and how I tried to teach them
+  - Over the course of my 3 iterations of the Rails class, I've identified some skills I want to teach that I find to be essential in my job and that go beyond just the technology - Ruby on Rails.
+  - Not an exhaustive list, just a few that I'd like to share
+
+
+1) Treat the internet as your textbook
+  - I have a policy that I won't respond to a question in an email if I can find the answer on the first page of Google results.
+  - Documentation: Bonus assignment to use a polymorphic association, didn't mention it in class.  Had a student show how he did it, including bringing up the documentation.
+  - Emails before course asking what the textbook is.
+
+
+2) Able to maintain code.
+  - This means two things
+    1) Able to debug code that you didn't write.
+      Ex: authentication homework
+    2) Able to maintain your own code
+      Ex: Work on the same code base/project for the entire semester.  Whatever design mistakes they make in the beginning, they either have to fix or live with.
+
+3) Solve real-life problem by building something
+  - Teach the class like one big hackathon.  They have to code the course site for me to use next semester.
+  - Few requirements, encourage them to be creative
+  - Think about a real-life users (themselves, and me)
+  - Ex: They have to define a schema themselves
+  - Ex: Teach about different environments
+  - Ex: importing data from an API/CSV
+  - Ex: Thinking about data!! MongoDB
+
+
+4) Engage with the community
+  Two ways: through code and in person
+  - Ex: In person.  First homework assignment requires signing up for a meetup.  I don't check to make sure they went.  Some signed up for beer enthusiasts.
+  - Ex: Through code. Take a penny, leave a penny.  Students are highly discouraged from using the internet to look up answers.  The only rule about plagiarism is it's copying if you take code directly from a classmate.  It's allowed if the classmate puts the code on stackoverflow and then you use it.
+  - Ex: They can make their apps public
+  - Ex: pull requests - required part of their final project.
+
+
+5) Think critically about code.
+  - Using stackoverflow.  I want them to get used to using code from stackoverflow and evaluating whether it is good enough to plop into their projects.  I had one student submit non-working code I know he got off stackoverflow.
+
+
+Why are all these hacker habits important?
+  The number of opportunities is growing at an astonishing rate.
+  Computer programming jobs are growing at 2x the national average
+  The U.S. Department of Labor projects that by 2020, there will be 1.4 million computer specialist job openings. Yet U.S. universities are expected produce only enough qualified graduates to fill 29% of these jobs.
+
+
+Getting involved as a hacker
+
+There are many opportunities to teach
+This is not an exhaustive list, just a bunch of example opportunities
+  Skillshare: either online or in person
+  General Assembly: short workshops or ongoing courses
+  YouTube channel
+  TEALs: Technology Education And Literacy in Schools, teach programming in a high school on your way to work.  National, about a dozen are doing it in NYC.
+  Hackety hack lessons: example of a github repo associated with _why's hackety hack project to which you can contribute
+  Podcast
+  Rails Girls: workshops around the world for girls to learn Rails
+
+
+There are many benefits
+  ...
+  I thought I knew Rails until I taught it
