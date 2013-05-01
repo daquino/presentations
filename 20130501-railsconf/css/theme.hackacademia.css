@@ -96,6 +96,28 @@ body {
   color:white;
 }
 
+.reveal .outline p{
+	color: white;
+}
+
+.reveal .outline h1 {
+	margin-top: 30px;
+}
+
+.reveal .main h1 {
+	color: #FF4040;
+}
+
+.reveal .main-centered h1 {
+	color: #FF4040;
+	margin-top: 150px;
+}
+
+.roadmap .outline h1 {
+	margin-top: 40px;
+	color: white;
+}
+
 .roadmap .state-background {
     background-position: top;
     background-repeat: no-repeat;
@@ -116,6 +138,11 @@ body {
 
 .classphoto  .state-background {
     background-image: url("../img/classphoto.jpg");
+}
+
+.classphoto .outline h1, p {
+	margin-top: 40px;
+	color: white;
 }
 
 

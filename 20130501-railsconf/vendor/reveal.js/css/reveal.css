@@ -167,8 +167,8 @@ body {
 .reveal blockquote {
 	display: block;
 	position: relative;
-	width: 70%;
-	margin: 5px auto;
+	width: 85%;
+	margin: 15px auto;
 	padding: 5px;
 	
 	font-style: italic;
@@ -407,7 +407,7 @@ body {
 	height: 60%;
 	left: 50%;
 	top: 50%;
-	margin-top: -320px;
+	margin-top: -340px;
 	padding: 20px 0px;
 	overflow: visible;
 	z-index: 1;
