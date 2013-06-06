@@ -161,7 +161,6 @@ body {
         background-image: url("../img/goruco_logo-original.png");
         background-position: left bottom;
         background-repeat: no-repeat;
-        /*background-size: contain;*/
         z-index: 1;
     }
 }
