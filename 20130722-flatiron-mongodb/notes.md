@@ -54,3 +54,8 @@
   * put in /usr/local/
   * create a data directory
   * start server
+
+## With Rails
+1) install rails --skip-active-record
+2) add mongoid to Gemfile
+3) model files: include Document module, check format on mongoid.org
