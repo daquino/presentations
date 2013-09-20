@@ -3,7 +3,7 @@ require 'set'
 members = Set.new
 threads = []
 
-100.times do |n|
+200.times do |n|
   threads << Thread.new do
     if n % 2 == 0
       members << n
